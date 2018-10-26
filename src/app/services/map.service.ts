@@ -1,22 +1,12 @@
 import { Injectable } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
-import * as MapboxDraw from '@mapbox/mapbox-gl-draw';
+
 @Injectable({
   providedIn: 'root'
 })
 export class MapService {
   map: any;
   constructor() { }
-
-  draw = new MapboxDraw({
-    displayControlsDefault: false,
-    controls: {
-      polygon: true,
-      line_string: true,
-      point: true
-    },
-    modes: MapboxDraw.modes
-  });
 
   getMap(container: string, centerLon: number, centerLat: number, zoom: number): any {
     return this.map = new mapboxgl.Map({
@@ -33,7 +23,7 @@ export class MapService {
     el.className = 'marker';
     el.id = id;
     const img = document.createElement('img');
-    img.src = `../../assets/map.png`;
+    img.src = `../../assets/marker.png`;
     el.appendChild(img);
     el.style.cursor = 'pointer';
     el.style.width = '16px';
@@ -55,6 +45,14 @@ export class MapService {
   }
 
   createPolygon(feature, id) {
-    this.draw.add(feature);
+    this.map.addSource(id, {
+      type: 'geojson',
+      data: feature
+    });
+    this.map.addLayer({
+      id: id,
+      type: 'Feature',
+      source: id,
+    });
   }
 }
