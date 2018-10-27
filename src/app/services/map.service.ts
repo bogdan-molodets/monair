@@ -43,16 +43,36 @@ export class MapService {
       zoom: zoom
     });
   }
-
-  createPolygon(feature, id) {
-    this.map.addSource(id, {
+  addSource(sourceId, data, layerType, layerId, paint) {
+    var layers = this.map.getStyle().layers;
+    // Find the index of the first symbol layer in the map style
+    var firstSymbolId;
+    for (var i = 0; i < layers.length; i++) {
+        if (layers[i].type === 'symbol') {
+            firstSymbolId = layers[i].id;
+            break;
+        }
+    }
+    this.map.addSource(sourceId, {
       type: 'geojson',
-      data: feature
+      data: data
     });
     this.map.addLayer({
-      id: id,
-      type: 'Feature',
-      source: id,
-    });
+      id: layerId,
+      type: layerType,
+      source: sourceId,
+      paint: paint
+    },firstSymbolId);
   }
+  // createPolygon(feature, id) {
+  //   this.map.addSource(id, {
+  //     type: 'geojson',
+  //     data: feature
+  //   });
+  //   this.map.addLayer({
+  //     id: id,
+  //     type: 'Feature',
+  //     source: id,
+  //   });
+  // }
 }
