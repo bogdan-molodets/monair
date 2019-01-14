@@ -1,24 +1,90 @@
-body{
+body {
     margin: 0;
 }
+
 app-root {
     width: 100%;
     height: 100%;
     position: absolute;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     margin: 0;
+}
+app-map h1{
+    color: white!important;
+    padding: .25em!important;
 }
 #map {
     position: absolute;
     width: 100%;
     height: 100%;
 }
-.mapboxgl-ctrl-logo{
+
+.mapboxgl-ctrl-logo {
     display: none!important;
 }
-#logo{
+
+#logo {
     position: absolute;
     z-index: 5;
     left: 10px;
     bottom: 20px;
+}
+
+app-data {
+    position: absolute;
+    top: 100vh;
+    width: 100%;
+    height: 100%;
+}
+
+app-data .ui.segment {
+    height: inherit;
+    box-shadow: none;
+    border: none;
+}
+
+#scroll-down {
+    cursor: pointer;
+    right: 0;
+    left: 0;
+    width: 42px;
+    height: 42px;
+    top: calc(100vh - 50px);
+    margin: 0 auto;
+    position: absolute;
+    z-index: 5;
+}
+
+a.ui.label {
+    margin: 2px!important;
+}
+
+.drop-filter {
+    display: flex;
+    margin: 0.1em 0;
+}
+
+.drop-filter button {
+    align-self: flex-end;
+}
+
+.ui.loader:after {
+    border-color: #f2701b transparent transparent!important;
+}
+
+@media only screen and (max-width: 767px) {
+    .drop-filter {
+        width: 100%;
+        display: grid;
+        padding: 0 .5em;
+    }
+    .drop-filter .ui.button {
+        margin-top: 5px;
+    }
+    #logo {
+        left: -55px;
+        bottom: -20px;
+        transform: scale(.45);
+    }
 }

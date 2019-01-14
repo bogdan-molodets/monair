@@ -1,0 +1,70 @@
+<div class='ui segment' id='scrollTo'>
+  <div class='ui large form'>
+    <div class='fields centered'>
+      <div class='field six wide'>
+        <label>Sensor Id</label>
+        <select class='ui select  dropdown'>
+          <option value=''>Select sensor</option>
+          <option *ngFor='let sensorId of sensorIds | async' value='{{sensorId}}' (click)='filterBySensorId(sensorId)'>{{sensorId}}</option>
+        </select>
+      </div>
+      <div class='field five wide'>
+        <label>Date From</label>
+        <div class='ui calendar' id='rangefrom'>
+          <div class='ui input  left icon'><i class='calendar icon'></i><input class='text' placeholder="From"></div>
+        </div>
+      </div>
+      <div class='field five wide'>
+        <label>Date To</label>
+        <div class='ui calendar' id='rangeto'>
+          <div class='ui input  left icon'><i class='calendar icon'></i><input class='text' placeholder="To"></div>
+        </div>
+      </div>
+      <div class='drop-filter'><button class='ui large button orange' tabindex="0" (click)='dropFilters()'>Drop</button></div>
+    </div>
+  </div>
+  <h5 class="ui header">Viewed properties:</h5>
+  <a *ngFor='let  sensorProperty of sensorProperties | customSensor:infoProperties' [ngClass]='{basic: isExcludeProperty(sensorProperty) }'
+    class="ui big orange label" (click)='toggleExcludePropertyLabel(sensorProperty)'>{{sensorProperty}}</a>
+  <h5 class="ui header">Sorted by properties:</h5>
+  <a *ngFor='let  sensorProperty of sensorProperties | customSensor:excludeProperties' [ngClass]='{basic: !isSortedProperty(sensorProperty)}'
+    class="ui big orange label" (click)='toggleSortedPropertyLabel(sensorProperty)'>{{sensorProperty}}</a>
+  <table class='ui orange small celled padded table'>
+    <thead>
+      <tr>
+        <ng-container *ngFor='let  sensorProperty of sensorProperties | customSensor:excludeProperties'>
+          <th>{{sensorProperty}}</th>
+        </ng-container>
+      </tr>
+    </thead>
+    <tbody *ngIf='sensors | async as res; else loading'>
+      <tr class='warning' *ngIf='res.results.length == 0'>
+        <td [attr.rowspan]="5" [attr.colspan]="sensorProperties.length" *ngIf='res.results.length == 0'><i class="info circle icon"></i>List
+          is empty</td>
+      </tr>
+      <tr *ngFor='let sensor of res.results'>
+        <ng-container *ngFor='let  sensorProperty of sensorProperties | customSensor:excludeProperties'>
+          <td [innerHTML]='sensor[sensorProperty] | customSensorProperty: sensorProperty'></td>
+        </ng-container>
+      </tr>
+
+    </tbody>
+    <ng-template #loading>
+      <td [attr.rowspan]="5" [attr.colspan]="sensorProperties.length">
+        <div class="ui active large text centered inline loader">Loading</div>
+      </td>
+    </ng-template>
+    <tfoot>
+      <tr>
+        <th [attr.colspan]="sensorProperties.length">
+          <a [ngClass]='{disabled: previous == null}' class='ui large orange circular icon button' (click)='getSensorsPagination(previous)'>
+            <i class="left chevron icon"></i>
+          </a>
+          <a [ngClass]='{disabled: next == null}' class='ui large orange circular icon button' (click)='getSensorsPagination(next)'>
+            <i class="right chevron icon"></i>
+          </a>
+        </th>
+      </tr>
+    </tfoot>
+  </table>
+</div>
